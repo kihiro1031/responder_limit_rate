@@ -1,0 +1,13 @@
+version: "3.7"
+services:
+  app:
+    tty: true
+    build:
+      context: .
+      dockerfile: ./docker/app/Dockerfile
+    container_name: responder_limit_rate_app
+    command: gunicorn -w 4 -k uvicorn.workers.UvicornWorker run:api -b :8000 --log-config logging_dev.conf --threads 4 --timeout 60 --log-level 'debug' --reload
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/usr/local/src/root
